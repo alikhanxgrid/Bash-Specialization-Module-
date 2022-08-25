@@ -1,5 +1,2 @@
-<<<<<<< HEAD
 N_SERVERS=2
-=======
-N_SERVERS=2 
->>>>>>> c90d3827efd26e20d481ed446eafe4afe95371fc
+
