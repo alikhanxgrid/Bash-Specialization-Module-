@@ -5,8 +5,11 @@ set -e
 
 ENV_FILE=""
 SSH_CONFIG=~/.ssh/config
+<<<<<<< HEAD
 SERVER_NAMES=()
 SERVER_NAMES_FILE="server-names.txt"
+=======
+>>>>>>> c90d3827efd26e20d481ed446eafe4afe95371fc
 
 while getopts 'f:' OPTION; do
   case "$OPTION" in
@@ -18,6 +21,7 @@ while getopts 'f:' OPTION; do
       N_SERVER=$N_SERVERS vagrant up
       if ! test -f "$SSH_CONFIG"; then
         touch $SSH_CONFIG
+<<<<<<< HEAD
       else
         echo ''>$SSH_CONFIG
       fi
@@ -28,6 +32,15 @@ while getopts 'f:' OPTION; do
         SERVER_NAMES+=($name)
       done
       { echo "${SERVER_NAMES[*]}"; } > $SERVER_NAMES_FILE
+=======
+      fi
+
+      for i in $(seq 1 $N_SERVERS); do
+        n=`expr 20 + $i` ##https://stackoverflow.com/questions/22460266/linux-bash-for-loop-and-function-for-adding-numbers
+        ip="192.168.56.$n"
+        name="server_$n"
+      done
+>>>>>>> c90d3827efd26e20d481ed446eafe4afe95371fc
     else
       echo "$ENV_FILE does not exist."
     fi
