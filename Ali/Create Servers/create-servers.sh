@@ -29,12 +29,11 @@ while getopts 'f:' OPTION; do
         echo '' >$SSH_CONFIG
       fi
 
-      #Get ssh-config for each VM add it to SSH_CONFIG file and add host names to an array
-      for i in $(seq 1 $N_SERVERS); do
-        echo "$(N_SERVER=$i vagrant ssh-config)" >$SSH_CONFIG
-        #name="$(N_SERVER=$i vagrant ssh-config | head -n 1 | sed 's/Host //g')"
+      #Get ssh-config for each VM add it to SSH_CONFIG file
 
-      done
+      echo "$(N_SERVER=$N_SERVERS vagrant ssh-config)" >$SSH_CONFIG
+
+      #Add server names to an array
       output="$(N_SERVER=$N_SERVERS vagrant ssh-config | grep -i "Host ")"
       readarray -t server_names <<<"$output"
       for name in ${server_names[@]}; do
