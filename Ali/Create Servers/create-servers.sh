@@ -15,10 +15,10 @@ while getopts 'f:' OPTION; do
     ENV_FILE="$OPTARG" #Save the flag value in ENV_FILE var
     #If file provided by the flag exists than proceed
     if test -f "$ENV_FILE"; then
-      echo "$ENV_FILE exists." 
-      
+      echo "$ENV_FILE exists."
+
       source $ENV_FILE #load variables from environment file
-      
+
       #provide env variables to the vagrantfile
       N_SERVER=$N_SERVERS vagrant up
 
@@ -26,18 +26,25 @@ while getopts 'f:' OPTION; do
       if ! test -f "$SSH_CONFIG"; then
         touch $SSH_CONFIG
       else
-        echo ''>$SSH_CONFIG 
+        echo '' >$SSH_CONFIG
       fi
 
       #Get ssh-config for each VM add it to SSH_CONFIG file and add host names to an array
       for i in $(seq 1 $N_SERVERS); do
-        echo "$(N_SERVER=$i vagrant ssh-config)" > $SSH_CONFIG
-        name="$(N_SERVER=$i vagrant ssh-config | head -n 1 | sed 's/Host //g')"
-        SERVER_NAMES+=($name)
-      done
+        echo "$(N_SERVER=$i vagrant ssh-config)" >$SSH_CONFIG
+        #name="$(N_SERVER=$i vagrant ssh-config | head -n 1 | sed 's/Host //g')"
 
+      done
+      output="$(N_SERVER=$N_SERVERS vagrant ssh-config | grep -i "Host ")"
+      readarray -t server_names <<<"$output"
+      for name in ${server_names[@]}; do
+        if ! [ "$name" == "Host" ]; then
+          SERVER_NAMES+=($name)
+        fi
+
+      done
       #save the array to a file
-      { echo "${SERVER_NAMES[*]}"; } > $SERVER_NAMES_FILE
+      { echo "${SERVER_NAMES[*]}"; } >$SERVER_NAMES_FILE
     else
       echo "$ENV_FILE does not exist."
     fi
