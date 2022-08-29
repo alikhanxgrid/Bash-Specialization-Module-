@@ -38,13 +38,12 @@ ssh -o StrictHostKeyChecking=No $server1 "sudo useradd -m -p '$(openssl passwd -
     if [ $? -eq 0 ]; then
         echo "User $userName added on $server1"
     else
-        echo "Error on adding user $userName"
+        echo "Error on adding user $userName at $server1"
     fi
-    
-    
+     
 ssh -o StrictHostKeyChecking=No $server2 "sudo useradd -m -p '$(openssl passwd -1 "$password")' $userName"
 if [ $? -eq 0 ]; then
         echo "User $userName added on $server2"
     else
-        echo "Error on adding user $userName"
+        echo "Error on adding user $userName at $server2"
     fi
